@@ -1,5 +1,4 @@
-# XeAP 2 Session 2: NRO Lab 
-# Setting up a National RADIUS Server
+# XeAP 2 Session 2: NRO Lab<br>Setting up an eduroam National RADIUS Server
 
 
 The XeAP 2 project will be using radsecproxy as the National and Top RADIUS Servers within the XeAP2 eduroam environment. There are other alternatives - such as FreeRADIUS - that are able to perform as an NRS but radsecproxy is lightweight and only requires the user to worry about a single configuration file unlike FreeRADIUS.
@@ -183,7 +182,7 @@ Radsecproxy requires a configuration file at ```/etc/radsecproxy.conf```.
 	}
 	```
 
-6. Add Blacklist Filters
+6. Add the blacklist filters
 
 	- Uses regular expressions to check realm and since no server is specified, it will send back an Access-Reject packet with a replymessage to notify the Service Provider on why the Access-Request was rejected. This helps prevent bogus Access-Requests from being forwarded to the eduroam TLR.
  
@@ -226,12 +225,12 @@ Radsecproxy requires a configuration file at ```/etc/radsecproxy.conf```.
 	}
 	
 	realm /\.sg$ {
-      replymessage "Misconfigured supplicant or downstream server: uses known-bad realm in this federation!"
+      replymessage "Misconfigured supplicant or downstream server: uses known-bad realm!"
       accountingresponse on
 	}
 	```
 
-7. Add eduroam Top Level RADIUS (TLR) Realm Block
+7. Add the eduroam Top Level RADIUS (TLR) Realm Block
 
 	- The eduroam TLR Realm block forwards all other authentication requests to the TLR to perform additional routing if it is unable to find an appropriate IRS to authenticate the roaming user.
 
@@ -275,16 +274,16 @@ rewrite defaultclient {
 
 # IHL-1 IdP and SP Block
 client IHL-1-SP_IdP {
-    host              203.0.113.1    # IP address of the IRS SP
-    type              UDP            # Uses a UDP connection to communicate with SP
-    secret            changeme       # Secret key negotiated between NRO and Institution
-    FTicksVISCOUNTRY  SG             # Generates F-Ticks for "visited country = Singapore"
+    host              203.0.113.1               # IP address of the IRS SP
+    type              UDP                       # Uses a UDP connection to communicate with SP
+    secret            changeme                  # Secret key negotiated between NRO and Institution
+    FTicksVISCOUNTRY  SG                        # Generates F-Ticks for "visited country = Singapore"
 }	
 server IHL-1-SP_IdP {
-    host          203.0.113.1    # IP address of the IRS IdP
-    type          UDP            # Uses a UDP connection to communicate with IdP
-    secret        changeme       # Secret key negotiated between NRO and Institution
-    statusserver  on             # Periodically sends status checks to server
+    host              203.0.113.1               # IP address of the IRS IdP
+    type              UDP                       # Uses a UDP connection to communicate with IdP
+    secret            changeme                  # Secret key negotiated between NRO and Institution
+    statusserver      on                        # Periodically sends status checks to server
 }
 
 
@@ -359,7 +358,7 @@ realm /(@|\.)yahoo.c(n|om) {
 }
 
 realm /\.sg$ {
-    replymessage "Misconfigured supplicant or downstream server: uses known-bad realm in this federation!"
+    replymessage "Misconfigured supplicant or downstream server: uses known-bad realm!"
     accountingresponse on
 }
 
