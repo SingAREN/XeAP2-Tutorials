@@ -249,22 +249,22 @@ Radsecproxy requires a configuration file at ```/etc/radsecproxy.conf```.
 #######################################################
 #          GENERAL AND LOGGING CONFIGURATION          #
 #######################################################
-ListenUDP *:1812                                 # Listens- on UDP port 1812 for all interfaces
-LogLevel 3                                       # Accept and Reject messages are logged on separate lines 
-LogDestination file:///var/log/radsecproxy.log   # Writes logs to the /var/log/radsecproxy.log file
+ListenUDP *:1812
+LogLevel 3
+LogDestination file:///var/log/radsecproxy.log
 
-FTicksReporting Full                             # Log level
-FTicksMAC VendorKeyHashed                        # FTicks MAC Address
-FTicksKey CHANGE-ME                              # FTicks key - PLEASE CHANGE!
-FTicksSyslogFacility LOG_LOCAL2                  # Syslog level that will receive the FTicks. 
+FTicksReporting Full
+FTicksMAC VendorKeyHashed
+FTicksKey CHANGE-ME
+FTicksSyslogFacility LOG_LOCAL2
 
 LoopPrevention On 
 
 # Remove VLAN attributes
 rewrite defaultclient {
-    removeAttribute    64                       # IETF 64 (Tunnel Type)
-    removeAttribute    65                       # IETF 65 (Tunnel Medium Type)
-    removeAttribute    81                       # IETF 81 (Tunnel Private Group ID) 
+    removeAttribute    64
+    removeAttribute    65
+    removeAttribute    81
 }
 
 
@@ -274,16 +274,16 @@ rewrite defaultclient {
 
 # IHL-1 IdP and SP Block
 client IHL-1-SP_IdP {
-    host              203.0.113.1               # IP address of the IRS SP
-    type              UDP                       # Uses a UDP connection to communicate with SP
-    secret            changeme                  # Secret key negotiated between NRO and Institution
-    FTicksVISCOUNTRY  SG                        # Generates F-Ticks for "visited country = Singapore"
+    host              203.0.113.1
+    type              UDP
+    secret            changeme
+    FTicksVISCOUNTRY  SG
 }	
 server IHL-1-SP_IdP {
-    host              203.0.113.1               # IP address of the IRS IdP
-    type              UDP                       # Uses a UDP connection to communicate with IdP
-    secret            changeme                  # Secret key negotiated between NRO and Institution
-    statusserver      on                        # Periodically sends status checks to server
+    host              203.0.113.1
+    type              UDP
+    secret            changeme
+    statusserver      on
 }
 
 
