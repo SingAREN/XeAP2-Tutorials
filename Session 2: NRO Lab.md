@@ -159,7 +159,6 @@ Radsecproxy requires a configuration file at ```/etc/radsecproxy.conf```.
       type UDP
       host 198.51.100.1           # Change IP address
       secret __eduroam_secret__   # Change secret key
-      statusserver on
 	}
 	server eduroam_TLR_1 {
 	    type UDP
@@ -172,7 +171,6 @@ Radsecproxy requires a configuration file at ```/etc/radsecproxy.conf```.
       type UDP
       host 198.51.100.2           # Change IP address
       secret __eduroam_secret__   # Change secret key
-      statusserver on
 	} 
 	server eduroam_TLR_2 {
       type UDP
@@ -295,7 +293,6 @@ client eduroam_TLR_1 {
         type UDP
         host 198.51.100.1
         secret __eduroam_secret__
-        statusserver on
 } 
 server eduroam_TLR_1 {
         type UDP
@@ -308,7 +305,6 @@ client eduroam_TLR_2 {
         type UDP
         host 198.51.100.2
         secret __eduroam_secret__
-        statusserver on
 } 
 server eduroam_TLR_2 {
         type UDP
