@@ -57,14 +57,18 @@ Radsecproxy requires a configuration file at ```/etc/radsecproxy.conf```.
 	- **Listening interface and port number:**
 
 	```
-	ListenUDP *:1812    # Listen on UDP port 1812 for all interfaces
+	# Listen on UDP port 1812 for all interfaces
+	ListenUDP *:1812
 	```
 
 	- **General Logging:**
 
 	```
-	LogLevel 3                                      # Accept and Reject logs are logged on separate lines 
-	LogDestination file:///var/log/radsecproxy.log  # Writes logs to /var/log/radsecproxy.log file
+	# Creates linelogs
+	LogLevel 3
+	
+	# Write logs to /var/log/radsecproxy.log file
+	LogDestination file:///var/log/radsecproxy.log
 	```
 
 	- **FTicks:**
@@ -72,13 +76,18 @@ Radsecproxy requires a configuration file at ```/etc/radsecproxy.conf```.
 		FTicks are a privacy preserving syslog message that used by eduroam Operations F-Ticks server in Europe to generate global eduroam usage statistics. <br>
 		Contact eduroam OT for the moniroting server IP address and give them your National RADIUS Server (NRS) IP address so that they can accept your FTicks logs.
     ```
-    FTicksReporting         Full               # Log level
-    FTicksMAC               VendorKeyHashed    # FTicks MAC Address
-    FTicksKey               CHANGE-ME          # FTicks key - PLEASE CHANGE!
+    # Log level
+    FTicksReporting Full
     
-    FTicksSyslogFacility    LOG_LOCAL2         # Syslog level that will receive the FTicks. 
-                                               # If FTicksSyslogFacility is not provided, 
-                                               # FTicks logs will be saved to LogDestination
+    # Hashed Calling Station ID attribute (MAC Address) of a roaming user's device
+    FTicksMAC VendorKeyHashed
+    
+    # Secret key
+    FTicksKey CHANGE-ME
+    
+    # Syslog level that will receive the FTicks.  If FTicksSyslogFacility is not provided,
+    # FTicks logs will be saved into LogDestination
+    FTicksSyslogFacility LOG_LOCAL2
     ```
 	
 	- **Loop prevention:**
@@ -97,9 +106,12 @@ Radsecproxy requires a configuration file at ```/etc/radsecproxy.conf```.
 	
     ```
     rewrite defaultclient {
-        removeAttribute     64              # IETF 64 (Tunnel Type)
-        removeAttribute     65              # IETF 65 (Tunnel Medium Type)
-        removeAttribute     81              # IETF 81 (Tunnel Private Group ID)
+        # IETF 64 (Tunnel Type)
+        removeAttribute 64
+        # IETF 65 (Tunnel Medium Type)
+        removeAttribute 65
+        # IETF 81 (Tunnel Private Group ID)
+        removeAttribute 81
      }
      ```
 
@@ -111,10 +123,14 @@ Radsecproxy requires a configuration file at ```/etc/radsecproxy.conf```.
 
     ```
     client IHL-SP_IdP-1 {
-        host              203.0.113.1    # IP address of the SP
-        type              UDP            # Uses a UDP connection to communicate with SP
-        secret            changeme       # Secret key negotiated between NRO and Institution
-        FTicksVISCOUNTRY  SG             # Generates F-Ticks for "visited country = Singapore"
+        # IP address or Fully Qualified Domain Name (FQDN) of the SP - example used
+        host 203.0.113.1
+        # RADIUS communication protocol used
+        type UDP
+        # Secret key negotiated between NRO and Institution
+        secret changeme
+        # Generates F-Ticks for "visited country = Singapore"
+        FTicksVISCOUNTRY SG
     }
     ```
 
@@ -124,10 +140,11 @@ Radsecproxy requires a configuration file at ```/etc/radsecproxy.conf```.
     
     ```
     server IHL-SP_IdP-1 {
-        host          203.0.113.1    # IP address of the IdP
-        type          UDP            # Uses a UDP connection to communicate with IdP
-        secret        changeme       # Secret key negotiated between NRO and Institution
-        statusserver  on             # Periodically sends status checks to server        
+        host 203.0.113.1
+        type UDP
+        secret changeme
+        # Periodically sends status checks to the IRS server
+        statusserver on
    }
    ```
 
@@ -140,7 +157,7 @@ Radsecproxy requires a configuration file at ```/etc/radsecproxy.conf```.
 	
 	```
 	realm /(@|\.)ihl1-domain.edu.sg {
-      server	IHL-SP_IdP-1
+            server IHL-SP_IdP-1
 	}
 	```
 	**Block Requirements**
@@ -150,37 +167,7 @@ Radsecproxy requires a configuration file at ```/etc/radsecproxy.conf```.
 	- **IRS as a Service Provider** - Only Client blocks are required
 
 
-5. Add the Top Level RADIUS (TLR) Client and Server blocks; Realm block will be added at the end.
-	
-	```
-	# eduroam Top Level RADIUS blocks 
-	
-	client eduroam_TLR_1 {
-      type UDP
-      host 198.51.100.1           # Change IP address
-      secret __eduroam_secret__   # Change secret key
-	}
-	server eduroam_TLR_1 {
-	    type UDP
-      host 198.51.100.1           # Change IP address
-      secret __eduroam_secret__   # Change secret key
-      statusserver on
-	}
-
-	client eduroam_TLR_2 {
-      type UDP
-      host 198.51.100.2           # Change IP address
-      secret __eduroam_secret__   # Change secret key
-	} 
-	server eduroam_TLR_2 {
-      type UDP
-      host 198.51.100.2           # Change IP address
-      secret __eduroam_secret__   # Change secret key
-      statusserver on
-	}
-	```
-
-6. Add the blacklist filters
+5. Add the blacklist filters
 
 	- Uses regular expressions to check realm and since no server is specified, it will send back an Access-Reject packet with a replymessage to notify the Service Provider on why the Access-Request was rejected. This helps prevent bogus Access-Requests from being forwarded to the eduroam TLR.
  
@@ -227,7 +214,39 @@ Radsecproxy requires a configuration file at ```/etc/radsecproxy.conf```.
       accountingresponse on
 	}
 	```
+6. Add the Top Level RADIUS (TLR) Client and Server blocks; Realm block will be added at the end.
+	
+	```
+	# eduroam Top Level RADIUS blocks 
+	
+	client eduroam_TLR_1 {
+	    type UDP
+	    # Example IP address - Needs to be changed
+	    host 198.51.100.1
+	    secret __eduroam_secret-CHANGE-ME__
+	}
+	server eduroam_TLR_1 {
+	    type UDP
+	    # Example IP addres - Needs to be changed
+	    host 198.51.100.1	
+	    secret __eduroam_secret-CHANGE-ME__	
+	    statusserver on
+	}
 
+	client eduroam_TLR_2 {
+	    type UDP
+	    # Example IP address - Needs to be changed	    
+	    host 198.51.100.2	
+	    secret __eduroam_secret-CHANGE-ME__
+	} 
+	server eduroam_TLR_2 {
+	    type UDP
+	    # Example IP address - Needs to be changed
+	    host 198.51.100.2
+	    secret __eduroam_secret-CHANGE-ME__
+	    statusserver on
+	}
+	```
 7. Add the eduroam Top Level RADIUS (TLR) Realm Block
 
 	- The eduroam TLR Realm block forwards all other authentication requests to the TLR to perform additional routing if it is unable to find an appropriate IRS to authenticate the roaming user.
@@ -236,8 +255,8 @@ Radsecproxy requires a configuration file at ```/etc/radsecproxy.conf```.
 	# DEFAULT forwarding: to the Top-Level Servers
 	
 	realm * {
-	        server eduroam_TLR_1
-	        server eduroam_TLR_2
+	    server eduroam_TLR_1
+	    server eduroam_TLR_2
 	}
 	```
 
@@ -267,7 +286,7 @@ rewrite defaultclient {
 
 
 #######################################################
-#       eduroam IRS CLIENT and SERVER BLOCKS          #
+#     eduroam IRS CLIENT, SERVER and REALM BLOCKS     #
 #######################################################
 
 # IHL-1 IdP and SP Block
@@ -283,35 +302,11 @@ server IHL-1-SP_IdP {
     secret            changeme
     statusserver      on
 }
-
-
-#######################################################
-#        eduroam TLR CLIENT and SERVER BLOCKS         #
-####################################################### 
-
-client eduroam_TLR_1 {
-        type UDP
-        host 198.51.100.1
-        secret __eduroam_secret__
-} 
-server eduroam_TLR_1 {
-        type UDP
-        host 198.51.100.1
-        secret __eduroam_secret__
-        statusserver on
+# IHL-1 Realm
+realm /(@|\.)ihl1-domain.edu.sg {
+	server	IHL-1-SP_IdP
 }
 
-client eduroam_TLR_2 {
-        type UDP
-        host 198.51.100.2
-        secret __eduroam_secret__
-} 
-server eduroam_TLR_2 {
-        type UDP
-        host 198.51.100.2
-        secret __eduroam_secret__
-        statusserver on
-}
 
 #######################################################
 #              BLACKLIST REALM FILTERS                #
@@ -360,14 +355,32 @@ realm /\.sg$ {
 
 
 #######################################################
-#                   REALM BLOCKS                      #
-#######################################################
+#        eduroam TLR CLIENT and SERVER BLOCKS         #
+####################################################### 
 
-# IHL-1 Realm
-realm /(@|\.)ihl1-domain.edu.sg {
-	server	IHL-1-SP_IdP
+client eduroam_TLR_1 {
+        type UDP
+        host 198.51.100.1
+        secret __eduroam_secret__
+} 
+server eduroam_TLR_1 {
+        type UDP
+        host 198.51.100.1
+        secret __eduroam_secret__
+        statusserver on
 }
 
+client eduroam_TLR_2 {
+        type UDP
+        host 198.51.100.2
+        secret __eduroam_secret__
+} 
+server eduroam_TLR_2 {
+        type UDP
+        host 198.51.100.2
+        secret __eduroam_secret__
+        statusserver on
+}
 
 #######################################################
 #                  TLR REALM BLOCK                    #
