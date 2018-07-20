@@ -4,7 +4,7 @@
 The XeAP 2 project will be using radsecproxy as the National and Top RADIUS Servers within the XeAP2 eduroam environment. There are other alternatives - such as FreeRADIUS - that are able to perform as an NRS but radsecproxy is lightweight and only requires the user to worry about a single configuration file unlike FreeRADIUS.
 
   
-As the XeAP 2 Virutal Machines are running Ubuntu 18.04 LTS, we will install radsecproxy v1.6.9 via the apt package manager instead of from source.
+As the XeAP 2 Virutal Machines are running Ubuntu 18.04 LTS, we will install radsecproxy v1.7.1 from source as the apt package manager only provides version 1.6.9.
  
 
 ## radsecproxy Installation
@@ -21,38 +21,71 @@ As the XeAP 2 Virutal Machines are running Ubuntu 18.04 LTS, we will install rad
 
 		$ sudo reboot
 
-4. Install radsecproxy via apt:
+4. Install packages needed to compile radsecproxy from source:
 
-		$ sudo apt install radsecproxy
+		$ sudo apt install build-essential libssl-dev make nettle-dev curl
+		
+5. Change directory to ```/usr/local/src/``` and download the radsecproxy v1.7.1 release
+		
+		$ cd /usr/local/src/
+		$ sudo curl -Lo radsecproxy-1.7.1.tar.gz \
+		      https://github.com/radsecproxy/radsecproxy/releases/download/1.7.1/radsecproxy-1.7.1.tar.gz
 
-5. Check the radsecproxy version once installation has been completed:
+6. Extract the radsecproxy package, remove the package and enter into the radsecproxy source directory
+		
+		$ sudo tar xvf radsecproxy-1.7.1.tar.gz
+		$ sudo rm radsecproxy-1.7.1.tar.gz
+		$ cd radsecproxy-1.7.1
+
+7. Download the radsecproxy patch needed to successfully compile the package on Ubuntu 18.04 LTS and apply patch to problematic file
+
+		$ sudo curl -fsL -o tests/t_fticks.patch \
+		    "https://raw.githubusercontent.com/spgreen/eduroam-radsecproxy-docker/master/1.7.1/patch/tests/t_fticks.patch"
+		$ sudo patch tests/t_fticks.c tests/t_fticks.patch
+
+8. Configure, compile, check and install radsecproxy -v
+
+		$ make
+		$ make check
+		$ sudo make install
+
+9. radsecproxy is now installed. The executable can be found using the ```which``` command
+	
+		$ which radsecproxy
+		
+	Output:
+	
+		/usr/local/sbin/radsecproxy
+		
+10. Check the radsecproxy version once installation has been completed:
 
 		$ radsecproxy -v 
 
 	Output you should receive:
 	```
-	radsecproxy revision 1.6.9
+	radsecproxy revision 1.7.1
 	This binary was built with support for the following transports:
 	  UDP
 	  TCP
 	  TLS
 	  DTLS
 	```
+	
+11. Create an empty configuration file at the default radsecproxy configuration file location 
+
+		$ touch /usr/local/etc/radsecproxy.conf
+
+12. Open ```/usr/local/etc/radsecproxy.conf``` in your favourite text editor (vim, nano, emacs, etc)
+
+		$ sudo vim /etc/radsecproxy.conf
+		
+    **You are now ready to create the configuration for your new National RADIUS Server!**
 
 
 ## radsecproxy Configuration
 
-Radsecproxy requires a configuration file at ```/etc/radsecproxy.conf```.
 
-1. Create an empty radsecproxy configuration file:
-
-	 	$ sudo touch /etc/radsecproxy.conf 
-
-2. Open ```/etc/radsecproxy.conf``` in your favourite text editor (vim, nano, emacs, etc):
-
-		$ sudo vim /etc/radsecproxy.conf
-
-3. Within the editor, add port, logging and F-Ticks statistical configuration 
+1. Within the editor, add port, logging and F-Ticks statistical configuration 
 
 	- **Listening interface and port number:**
 
@@ -115,7 +148,7 @@ Radsecproxy requires a configuration file at ```/etc/radsecproxy.conf```.
      }
      ```
 
-4. Add Institutional RADIUS Servers (IRS) using Client, Server and Realm blocks. An IRS can act as an IdP, SP, or IdP & SP.
+2. Add Institutional RADIUS Servers (IRS) using Client, Server and Realm blocks. An IRS can act as an IdP, SP, or IdP & SP.
 	
 	- **Client Blocks**
 	
@@ -167,7 +200,7 @@ Radsecproxy requires a configuration file at ```/etc/radsecproxy.conf```.
 	- **IRS as a Service Provider** - Only Client blocks are required
 
 
-5. Add the blacklist filters
+3. Add the blacklist filters
 
 	- Uses regular expressions to check realm and since no server is specified, it will send back an Access-Reject packet with a replymessage to notify the Service Provider on why the Access-Request was rejected. This helps prevent bogus Access-Requests from being forwarded to the eduroam TLR.
  
@@ -214,7 +247,7 @@ Radsecproxy requires a configuration file at ```/etc/radsecproxy.conf```.
       accountingresponse on
 	}
 	```
-6. Add the Top Level RADIUS (TLR) Client and Server blocks; Realm block will be added at the end.
+4. Add the Top Level RADIUS (TLR) Client and Server blocks; Realm block will be added at the end.
 	
 	```
 	# eduroam Top Level RADIUS blocks 
@@ -247,7 +280,7 @@ Radsecproxy requires a configuration file at ```/etc/radsecproxy.conf```.
 	    statusserver on
 	}
 	```
-7. Add the eduroam Top Level RADIUS (TLR) Realm Block
+5. Add the eduroam Top Level RADIUS (TLR) Realm Block
 
 	- The eduroam TLR Realm block forwards all other authentication requests to the TLR to perform additional routing if it is unable to find an appropriate IRS to authenticate the roaming user.
 
