@@ -2,13 +2,14 @@
 This tutorial will go through the steps of setting up Docker and Docker Compose on Ubuntu 18.04 LTS as it will be used for the XeAP2 lab environment.
 
 
-## Remove Ubuntu apt Docker version 
+## Docker
+### Remove Ubuntu apt Docker version 
 
 Remove the Docker version that comes from the Ubuntu apt package manager as it is an older version which does not come with Docker Compose. 
 
     $ sudo apt-get remove docker docker-engine docker.io
 
-## Setup the Docker Repository
+### Setup the Docker Repository
 
 Update apt packages to ensure we receive the most up-to-date packages when installing from the apt package manager.
 
@@ -47,7 +48,7 @@ Add the stable Docker repository to the apt package manager
        $(lsb_release -cs) \
        stable"
 
-## Install Docker CE
+### Install Docker CE
 
 Update the Docker CE repository within the apt package manager
 
@@ -97,15 +98,16 @@ Enable Docker to start on boot
     $ sudo systemctl enable docker
     
 
-## Docker Compose Overview
+## Docker Compose
 
 Docker Compose is an addon to Docker which allows the user to define and setup multi-container Docker applications using a YAML configuration file. Docker Compose will be used for the XeAP2 Ancillary Tools session.
 
-## Docker Compose Installation
+### Docker Compose Installation
 
 Download the latest version of Docker Compose binary:
 
-    $ sudo curl -L https://github.com/docker/compose/releases/download/1.21.2/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose
+    $ sudo curl -L https://github.com/docker/compose/releases/download/1.21.2/docker-compose-$(uname -s)-$(uname -m) \
+    -o /usr/local/bin/docker-compose
 
 Give executable permissions to the Docker Compose binary:
 
@@ -121,8 +123,36 @@ $ docker-compose --version
 docker-compose version 1.21.2, build 1719ceb
 ```
 
+## Modify Kernel Settings for the Ancillary Tools Virtual Machine
+
+One of the XeAP2 Lab machines will be used for the Ancillary Tools. For that VM, you will need to increase the ```vm.max_map_count``` kernal value to prevent out of memory exceptions for Elasticsearch - one of the applications bundled with the Ancillary Tools.
+
+Create and edit a new sysctl configuration file within your favourite text editory (nano, vim, etc):
+
+    $ sudo vim /etc/sysctl.d/elasticsearch.conf
+
+Add the following line to the file
+
+    vm.max_map_count=262144
+    
+Save and exit the file.
+
+Load the new kernel value from the  ```elasticsearch.conf``` file.
+
+```
+$ sudo sysctl -p /etc/sysctl.d/elasticsearch.conf
+```
+
+```
+vm.max_map_count = 262144
+```
+The value for ```vm.max_map_count``` has now changed to 262144.
+
+
+**The XeAP2 Lab VM is now ready to use Docker and Docker Compose!**
 
 ### References    
-Docker CE Ubuntu Installation: https://docs.docker.com/install/linux/docker-ce/ubuntu/#set-up-the-repository
-Docker Compose Installation: https://docs.docker.com/compose/install/
+- **Docker CE Ubuntu Installation**: https://docs.docker.com/install/linux/docker-ce/ubuntu/#set-up-the-repository
+- **Docker Compose Installation**: https://docs.docker.com/compose/install/
+- **Elasticsearch vm.max_map_count requirement**: https://www.elastic.co/guide/en/elasticsearch/reference/current/vm-max-map-count.html
 
