@@ -32,7 +32,7 @@ Verify the key by using the following fingerprint: ```9DC8 5822 9FC7 DD38 854A E
   ```
   $ sudo apt-key fingerprint 0EBFCD88
   ```
-  Output:
+  
   ```
   pub   4096R/0EBFCD88 2017-02-22
         Key fingerprint = 9DC8 5822 9FC7 DD38 854A  E2D8 8D81 803C 0EBF CD88
@@ -62,7 +62,7 @@ Verify the Docker CE installation by running the ```hello-world``` image. Docker
   ```
   $ sudo docker run hello-world
   ```
-  Output:
+
   ```
   Unable to find image 'hello-world:latest' locally
   latest: Pulling from library/hello-world
@@ -96,5 +96,33 @@ Enable Docker to start on boot
 
     $ sudo systemctl enable docker
     
+
+## Docker Compose Overview
+
+Docker Compose is an addon to Docker which allows the user to define and setup multi-container Docker applications using a YAML configuration file. Docker Compose will be used for the XeAP2 Ancillary Tools session.
+
+## Docker Compose Installation
+
+Download the latest version of Docker Compose binary:
+
+    $ sudo curl -L https://github.com/docker/compose/releases/download/1.21.2/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose
+
+Give executable permissions to the Docker Compose binary:
+
+    $ sudo chmod +x /usr/local/bin/docker-compose
     
-https://docs.docker.com/install/linux/docker-ce/ubuntu/#set-up-the-repository
+Verify the installation
+
+```
+$ docker-compose --version
+```
+
+```
+docker-compose version 1.21.2, build 1719ceb
+```
+
+
+### References    
+Docker CE Ubuntu Installation: https://docs.docker.com/install/linux/docker-ce/ubuntu/#set-up-the-repository
+Docker Compose Installation: https://docs.docker.com/compose/install/
+
