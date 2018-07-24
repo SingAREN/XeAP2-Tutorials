@@ -104,25 +104,6 @@ As the XeAP 2 Virutal Machines are running Ubuntu 18.04 LTS, we will install rad
 	# Write logs to /var/log/radsecproxy.log file
 	LogDestination file:///var/log/radsecproxy.log
 	```
-
-	- **FTicks:**
-		
-		FTicks are a privacy preserving syslog message that used by eduroam Operations F-Ticks server in Europe to generate global eduroam usage statistics. <br>
-		Contact eduroam OT for the moniroting server IP address and give them your National RADIUS Server (NRS) IP address so that they can accept your FTicks logs.
-    ```
-    # Log level
-    FTicksReporting Full
-    
-    # Hashed Calling Station ID attribute (MAC Address) of a roaming user's device
-    FTicksMAC VendorKeyHashed
-    
-    # Secret key
-    FTicksKey CHANGE-ME
-    
-    # Syslog level that will receive the FTicks.  If FTicksSyslogFacility is not provided,
-    # FTicks logs will be saved into LogDestination
-    FTicksSyslogFacility LOG_LOCAL2
-    ```
 	
 	- **Loop prevention:**
 
@@ -163,8 +144,6 @@ As the XeAP 2 Virutal Machines are running Ubuntu 18.04 LTS, we will install rad
         type UDP
         # Secret key negotiated between NRO and Institution
         secret changeme
-        # Generates F-Ticks for "visited country = Singapore"
-        FTicksVISCOUNTRY SG
     }
     ```
 
@@ -242,11 +221,6 @@ As the XeAP 2 Virutal Machines are running Ubuntu 18.04 LTS, we will install rad
       replymessage "Misconfigured client: invalid eduroam realm."
       accountingresponse on
 	}
-	
-	realm /\.sg$ {
-      replymessage "Misconfigured supplicant or downstream server: uses known-bad realm!"
-      accountingresponse on
-	}
 	```
 4. Add the Top Level RADIUS (TLR) Client and Server blocks; Realm block will be added at the end.
 	
@@ -304,11 +278,6 @@ ListenUDP *:1812
 LogLevel 3
 LogDestination file:///var/log/radsecproxy.log
 
-FTicksReporting Full
-FTicksMAC VendorKeyHashed
-FTicksKey CHANGE-ME
-FTicksSyslogFacility LOG_LOCAL2
-
 LoopPrevention On 
 
 # Remove VLAN attributes
@@ -328,7 +297,6 @@ client IHL-1-SP_IdP {
     host              203.0.113.1
     type              UDP
     secret            changeme
-    FTicksVISCOUNTRY  SG
 }	
 server IHL-1-SP_IdP {
     host              203.0.113.1
@@ -379,11 +347,6 @@ realm /(@|\.)gmail.com {
 
 realm /(@|\.)yahoo.c(n|om) {
     replymessage "Misconfigured client: invalid eduroam realm."
-    accountingresponse on
-}
-
-realm /\.sg$ {
-    replymessage "Misconfigured supplicant or downstream server: uses known-bad realm!"
     accountingresponse on
 }
 
