@@ -45,6 +45,7 @@ As the XeAP 2 Virutal Machines are running Ubuntu 18.04 LTS, we will install rad
 
 8. Configure, compile, check and install radsecproxy -v
 
+		$ ./configure
 		$ make
 		$ make check
 		$ sudo make install
@@ -77,7 +78,7 @@ As the XeAP 2 Virutal Machines are running Ubuntu 18.04 LTS, we will install rad
 
 12. Open ```/usr/local/etc/radsecproxy.conf``` in your favourite text editor (vim, nano, emacs, etc)
 
-		$ sudo vim /etc/radsecproxy.conf
+		$ sudo vim /usr/local/etc/radsecproxy.conf
 		
     **You are now ready to create the configuration for your new National RADIUS Server!**
 
