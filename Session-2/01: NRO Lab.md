@@ -33,7 +33,7 @@ As the XeAP 2 Virutal Machines are running Ubuntu 18.04 LTS, we will install rad
 
 6. Extract the radsecproxy package, remove the package and enter into the radsecproxy source directory
 		
-		$ sudo tar xvf radsecproxy-1.7.1.tar.gz
+		$ sudo tar xpvf radsecproxy-1.7.1.tar.gz
 		$ sudo rm radsecproxy-1.7.1.tar.gz
 		$ cd radsecproxy-1.7.1
 
@@ -45,9 +45,9 @@ As the XeAP 2 Virutal Machines are running Ubuntu 18.04 LTS, we will install rad
 
 8. Configure, compile, check and install radsecproxy -v
 
-		$ ./configure
-		$ make
-		$ make check
+		$ sudo ./configure
+		$ sudo make
+		$ sudo make check
 		$ sudo make install
 
 9. radsecproxy is now installed. The executable can be found using the ```which``` command
@@ -74,7 +74,7 @@ As the XeAP 2 Virutal Machines are running Ubuntu 18.04 LTS, we will install rad
 	
 11. Create an empty configuration file at the default radsecproxy configuration file location 
 
-		$ touch /usr/local/etc/radsecproxy.conf
+		$ sudo touch /usr/local/etc/radsecproxy.conf
 
 12. Open ```/usr/local/etc/radsecproxy.conf``` in your favourite text editor (vim, nano, emacs, etc)
 
