@@ -37,11 +37,17 @@ As the XeAP 2 Virutal Machines are running Ubuntu 18.04 LTS, we will install rad
 		$ sudo rm radsecproxy-1.7.1.tar.gz
 		$ cd radsecproxy-1.7.1
 
-7. Download the radsecproxy patch needed to successfully compile the package on Ubuntu 18.04 LTS and apply patch to problematic file
+7. Download and apply the radsecproxy patch needed to successfully compile the package on Ubuntu 18.04 LTS
 
 		$ sudo curl -fsL -o tests/t_fticks.patch \
 		    "https://raw.githubusercontent.com/spgreen/eduroam-radsecproxy-docker/master/1.7.1/patch/tests/t_fticks.patch"
 		$ sudo patch tests/t_fticks.c tests/t_fticks.patch
+
+8. Download the line log patch which adds the Operator Name and Chargeable User Identity (CUI) attributes to the radsecproxy logs. Shout-out to Vlad Mencl, REANNZ, for creating the patch.
+
+		$ sudo curl -fsL -o radsecproxy-log-opname-cui.diff \
+		    "https://raw.githubusercontent.com/spgreen/eduroam-radsecproxy-docker/master/1.7.1/patch/radsecproxy-log-opname-cui.diff"
+		$ sudo patch -p1 < radsecproxy-log-opname-cui.diff
 
 8. Configure, compile, check and install radsecproxy -v
 
