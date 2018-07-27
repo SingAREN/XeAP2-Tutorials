@@ -4,8 +4,9 @@ The NRS Docker container uses radsecproxy on a base Ubuntu 18.04 LTS image.
 
 ## Using the NRS Docker Image
 
-Create or use existing a radsecproxy configuration file in your desired directory; it will be mounted into the container on start-up. E.g. /etc/radsecproxy.conf
-Create a log file if you want logs to be saved on the Docker host machine: E.g. # touch /var/log/radsecproxy.log,
+Create or use existing a radsecproxy configuration file in your desired directory; it will be mounted into the container on start-up.
+
+Create a log file if you want logs to be saved on the Docker host machine: E.g. ```# touch /var/log/radsecproxy.log```
 
 ### Foreground Start
 Start the container in the foreground using the following command. Remember to change the file paths for the radsecproxy log and configuration file.
@@ -14,7 +15,7 @@ Start the container in the foreground using the following command. Remember to c
       -p 1812:1812/udp \
       -p 1813:1813/udp \
       -v /etc/localtime:/etc/localtime:ro \
-      -v /path/to/log/file:/var/log/radsecproxy.log \ 
+      -v /path/to/log/file:/var/log/radsecproxy/radsecproxy.log \ 
       -v /path/to/radsecproxy.conf:/etc/radsecproxy.conf \
       spgreen/eduroam-radsecproxy:1.7.1
       
@@ -41,7 +42,7 @@ $ sudo docker run -dit --name nrs \
   -p 1812:1812/udp \
   -p 1813:1813/udp \
   -v /etc/localtime:/etc/localtime:ro \
-  -v /path/to/log/file:/var/log/radsecproxy.log \ 
+  -v /path/to/log/file:/var/log/radsecproxy/radsecproxy.log \ 
   -v /path/to/radsecproxy.conf:/etc/radsecproxy.conf \
   spgreen/eduroam-radsecproxy:1.7.1
 ```
