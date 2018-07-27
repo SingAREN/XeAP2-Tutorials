@@ -32,7 +32,7 @@ Once you know that the NRS Docker works, you would want to the container in the 
 
 Stop and remove the current NRS Docker container. Since we used a name to initialise the container, we can stop and remove it using that same name. 
 
-    $ sudo docker stop nrs-radsecproxy; sudo docker rm nrs-radsecproxy
+    $ sudo docker stop nrs; sudo docker rm nrs
 
 Restart the container but this time in background mode
 
