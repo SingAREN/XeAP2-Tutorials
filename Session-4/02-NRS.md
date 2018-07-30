@@ -26,12 +26,12 @@ Start the container in the foreground using the following command. Remember to c
 - `-p 1812:1812/udp`:
     - Opens UDP port 1812 on the host machine and maps it to UDP port 1812 on the Docker container. Therefore if the host machine receives a RADIUS request on UDP port 1812, the host will send said request to the Docker container for processing. 
 - `-e TZ=Pacific/Auckland`:
-    - TZ is an environment variable that sets the timezone of the container. Change to your desired timezone. Default: UTC
+    - TZ is an environment variable that sets the timezone of the container; change to your desired timezone. Default: UTC
 - `-e ENVIRONMENT=TEST`:
     - If the ENVIRONMENT environment variable is set to TEST, the Docker container will send logs to stdout. Used only for initial debugging and should not be used in a production envrionment as logs will be saved to a file.
 - `-v /path/to/log/file:/var/log/radsecproxy/radsecproxy.log`:
     - Mounts host machine file at `/path/to/log/file.log` to `/var/log/radsecproxy/radsecproxy.log`. Provides the ability to save files to the host machine or place configuration files within the Docker container before the container starts.
-    **Please change the log and configuration file paths for the above example.**
+    **Please change the log file (`/path/to/log/file.log`) and configuration file (`/path/to/radsecproxy.conf`) paths for the above example.**
     
 If the configuration is correct, you will see a similar output:
 
