@@ -81,8 +81,12 @@ As the XeAP 2 Virutal Machines are running Ubuntu 18.04 LTS, we will install rad
 11. Create an empty configuration file at the default radsecproxy configuration file location 
 
 		$ sudo touch /usr/local/etc/radsecproxy.conf
+		
+12. Create the log directory where radsecproxy will store its logs
 
-12. Open ```/usr/local/etc/radsecproxy.conf``` in your favourite text editor (vim, nano, emacs, etc)
+		$ sudo mkdir /var/log/radsecproxy
+
+13. Open ```/usr/local/etc/radsecproxy.conf``` in your favourite text editor (vim, nano, emacs, etc)
 
 		$ sudo vim /usr/local/etc/radsecproxy.conf
 		
@@ -92,7 +96,7 @@ As the XeAP 2 Virutal Machines are running Ubuntu 18.04 LTS, we will install rad
 ## radsecproxy Configuration
 
 
-1. Within the editor, add port, logging and F-Ticks statistical configuration 
+1. Within the editor, add port and logging configuration 
 
 	- **Listening interface and port number:**
 
@@ -107,8 +111,8 @@ As the XeAP 2 Virutal Machines are running Ubuntu 18.04 LTS, we will install rad
 	# Creates linelogs
 	LogLevel 3
 	
-	# Write logs to /var/log/radsecproxy.log file
-	LogDestination file:///var/log/radsecproxy.log
+	# Write logs to /var/log/radsecproxy/radsecproxy.log file
+	LogDestination file:///var/log/radsecproxy/radsecproxy.log
 	```
 	
 	- **Loop prevention:**
@@ -282,7 +286,7 @@ As the XeAP 2 Virutal Machines are running Ubuntu 18.04 LTS, we will install rad
 #######################################################
 ListenUDP *:1812
 LogLevel 3
-LogDestination file:///var/log/radsecproxy.log
+LogDestination file:///var/log/radsecproxy/radsecproxy.log
 
 LoopPrevention On 
 
