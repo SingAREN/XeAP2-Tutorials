@@ -25,19 +25,19 @@ As the XeAP 2 Virutal Machines are running Ubuntu 18.04 LTS, we will install rad
 
 		$ sudo apt install build-essential libssl-dev make nettle-dev curl
 		
-5. Change directory to ```/usr/local/src/``` and download the radsecproxy v1.7.1 release
+5. Change directory to ```/usr/local/src/``` and download the radsecproxy v1.7.1 release:
 		
 		$ cd /usr/local/src/
 		$ sudo curl -Lo radsecproxy-1.7.1.tar.gz \
 		      https://github.com/radsecproxy/radsecproxy/releases/download/1.7.1/radsecproxy-1.7.1.tar.gz
 
-6. Extract the radsecproxy package, remove the package and enter into the radsecproxy source directory
+6. Extract the radsecproxy package, remove the package and enter into the radsecproxy source directory:
 		
 		$ sudo tar xpvf radsecproxy-1.7.1.tar.gz
 		$ sudo rm radsecproxy-1.7.1.tar.gz
 		$ cd radsecproxy-1.7.1
 
-7. Download and apply the radsecproxy patch needed to successfully compile the package on Ubuntu 18.04 LTS
+7. Download and apply the radsecproxy patch needed to successfully compile the package on Ubuntu 18.04 LTS:
 
 		$ sudo curl -fsL -o tests/t_fticks.patch \
 		    "https://raw.githubusercontent.com/spgreen/eduroam-radsecproxy-docker/master/1.7.1/patch/tests/t_fticks.patch"
@@ -49,14 +49,14 @@ As the XeAP 2 Virutal Machines are running Ubuntu 18.04 LTS, we will install rad
 		    "https://raw.githubusercontent.com/spgreen/eduroam-radsecproxy-docker/master/1.7.1/patch/radsecproxy-log-opname-cui.diff"
 		$ sudo patch -p1 < radsecproxy-log-opname-cui.diff
 
-8. Configure, compile, check and install radsecproxy -v
+8. Configure, compile, check and install radsecproxy -v:
 
 		$ sudo ./configure
 		$ sudo make
 		$ sudo make check
 		$ sudo make install
 
-9. radsecproxy is now installed. The executable can be found using the ```which``` command
+9. radsecproxy is now installed. The executable can be found using the ```which``` command:
 	
 		$ which radsecproxy
 		
@@ -78,15 +78,15 @@ As the XeAP 2 Virutal Machines are running Ubuntu 18.04 LTS, we will install rad
 	  DTLS
 	```
 	
-11. Create an empty configuration file at the default radsecproxy configuration file location 
+11. Create an empty configuration file at the default radsecproxy configuration file location:
 
 		$ sudo touch /usr/local/etc/radsecproxy.conf
 		
-12. Create the log directory where radsecproxy will store its logs
+12. Create the log directory where radsecproxy will store its logs:
 
 		$ sudo mkdir /var/log/radsecproxy
 
-13. Open ```/usr/local/etc/radsecproxy.conf``` in your favourite text editor (vim, nano, emacs, etc)
+13. Open ```/usr/local/etc/radsecproxy.conf``` in your favourite text editor (vim, nano, emacs, etc):
 
 		$ sudo vim /usr/local/etc/radsecproxy.conf
 		
@@ -96,7 +96,7 @@ As the XeAP 2 Virutal Machines are running Ubuntu 18.04 LTS, we will install rad
 ## radsecproxy Configuration
 
 
-1. Within the editor, add port and logging configuration 
+1. Within the editor, add port and logging configuration:
 
 	- **Listening interface and port number:**
 
@@ -140,7 +140,7 @@ As the XeAP 2 Virutal Machines are running Ubuntu 18.04 LTS, we will install rad
      }
      ```
 
-2. Add Institutional RADIUS Servers (IRS) using Client, Server and Realm blocks. An IRS can act as an IdP, SP, or IdP & SP.
+2. Add Institutional RADIUS Servers (IRS) using Client, Server and Realm blocks. An IRS can act as an IdP, SP, or IdP & SP:
 	
 	- **Client Blocks**
 	
@@ -190,7 +190,7 @@ As the XeAP 2 Virutal Machines are running Ubuntu 18.04 LTS, we will install rad
 	- **IRS as a Service Provider** - Only Client blocks are required
 
 
-3. Add the blacklist filters
+3. Add the blacklist filters:
 
 	- Uses regular expressions to check realm and since no server is specified, it will send back an Access-Reject packet with a replymessage to notify the Service Provider on why the Access-Request was rejected. This helps prevent bogus Access-Requests from being forwarded to the eduroam TLR.
  
@@ -404,7 +404,7 @@ realm * {
 
 There are two settings that are used to run the radsecproxy service. The first is in 'foreground' mode which we will use for debugging purposes. It will display logs to stdout as shown below.
 
-1. Verify the configuration file is syntactically fine by running radsecroxy in pretend mode. There will only be output if there is an issue with the configuration file.
+1. Verify the configuration file is syntactically fine by running radsecroxy in pretend mode. Output will only appear if there is an issue with the configuration file.
 
 	```
 	$ sudo radsecproxy -p	
