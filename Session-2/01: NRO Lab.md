@@ -471,18 +471,24 @@ $ sudo tcpdump -i ens160 port 1812 -T radius
 ss or Socket Statistics is a tool that displays current socket information of the host machine. It allows us to check whether the radsecproxy process is listening to UDP port 1812 by usiing the following command:
 
 ```	
-$ sudo ss -ulSpn sport eq 1812
+$ sudo ss -ulpn sport eq 1812
 ```
 
 ```
-Netid       State         Recv-Q        Send-Q                Local Address:Port                 Peer Address:Port
-udp         UNCONN        15232         0                           0.0.0.0:1812                      0.0.0.0:*            users:(("radsecproxy",pid=2668,fd=5))
-udp         UNCONN        0             0                              [::]:1812                         [::]:*            users:(("radsecproxy",pid=2668,fd=6))
+State   Recv-Q   Send-Q  Local Address:Port   Peer Address:Port
+UNCONN  43520    0             0.0.0.0:1812            0.0.0.0:*   users:(("radsecproxy",pid=2668,fd=5))
+UNCONN  0        0                [::]:1812               [::]:*   users:(("radsecproxy",pid=2668,fd=6))
 
 ```
 The output shows that radsecproxy is indeed listening on UDP Port 1812 on both IPv4 and IPv6 on all interfaces indicated by `0.0.0.0`.
 
-**Flag Explanation**
+**Flag and Input Explanation**
+- `-u`: Display UDP sockets
+- `-l`: Display only listening sockets
+- `-p`: Show process using socket
+- `-n`: Displays numeric port number. If this was not used, you would see `radius` instead of `1812`
+- `sport eq 1812`: Filters for source port equal to 1812
+
 
 
 ## Conclusion
