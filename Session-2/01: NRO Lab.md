@@ -122,9 +122,10 @@ UncomplicatedFirewall (ufw) is enabled on the XeAP2 lab Virtual Machines thus th
 
 		$ sudo touch /usr/local/etc/radsecproxy.conf
 		
-12. Create the log directory where radsecproxy will store its logs:
+12. Create the log directory and the log file where radsecproxy will store its logs:
 
 		$ sudo mkdir /var/log/radsecproxy
+		$ sudo touch /var/log/radsecproxy/radsecproxy.log
 
 13. Open ```/usr/local/etc/radsecproxy.conf``` in your favourite text editor (vim, nano, emacs, etc):
 
