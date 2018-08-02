@@ -61,33 +61,29 @@ UncomplicatedFirewall (ufw) is enabled on the XeAP2 lab Virtual Machines thus th
 
 		$ sudo apt upgrade
 
-3. Reboot the virtual machine if a new kernel was installed:
-
-		$ sudo reboot
-
-4. Install packages needed to compile radsecproxy from source:
+3. Install packages needed to compile radsecproxy from source:
 
 		$ sudo apt install build-essential libssl-dev make nettle-dev curl
 		
-5. Change directory to ```/usr/local/src/``` and download the radsecproxy v1.7.1 release:
+4. Change directory to ```/usr/local/src/``` and download the radsecproxy v1.7.1 release:
 		
 		$ cd /usr/local/src/
 		$ sudo curl -Lo radsecproxy-1.7.1.tar.gz \
 		      https://github.com/radsecproxy/radsecproxy/releases/download/1.7.1/radsecproxy-1.7.1.tar.gz
 
-6. Extract the radsecproxy package, remove the package and enter into the radsecproxy source directory:
+5. Extract the radsecproxy package, remove the package and enter into the radsecproxy source directory:
 		
 		$ sudo tar xpvf radsecproxy-1.7.1.tar.gz
 		$ sudo rm radsecproxy-1.7.1.tar.gz
 		$ cd radsecproxy-1.7.1
 
-7. Download and apply the radsecproxy patch needed to successfully compile the package on Ubuntu 18.04 LTS:
+6. Download and apply the radsecproxy patch needed to successfully compile the package on Ubuntu 18.04 LTS:
 
 		$ sudo curl -fsL -o tests/t_fticks.patch \
 		    "https://raw.githubusercontent.com/spgreen/eduroam-radsecproxy-docker/master/1.7.1-xeap2/patch/tests/t_fticks.patch"
 		$ sudo patch tests/t_fticks.c tests/t_fticks.patch
 
-8. Download the line log patch which adds the Operator Name and Chargeable User Identity (CUI) attributes to the radsecproxy logs. Shout-out to Vlad Mencl, REANNZ, for creating the patch.
+7. Download the line log patch which adds the Operator Name and Chargeable User Identity (CUI) attributes to the radsecproxy logs. Shout-out to Vlad Mencl, REANNZ, for creating the patch.
 
 		$ sudo curl -fsL -o radsecproxy-log-opname-cui.diff \
 		    "https://raw.githubusercontent.com/spgreen/eduroam-radsecproxy-docker/master/1.7.1-xeap2/patch/radsecproxy-log-opname-cui.diff"
