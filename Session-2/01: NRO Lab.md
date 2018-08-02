@@ -442,33 +442,29 @@ There are two settings that are used to run the radsecproxy service. The first i
 ## Debugging Tool Overview
 
 ### tcpdump
-tcpdump is network packet analyser tool that can be used to view incoming and outgoing packets from a network interface in real-time. We will use tcpdump to check on RADIUS communication happening between eduroam servers.
+A network packet analyser tool that can be used to view incoming and outgoing packets on a network interface in real-time. We will use tcpdump to check on RADIUS communication happening between eduroam servers.
 
-**Base Command**:
-	
-	$ sudo tcpdump -i <interface name> port <port number> -T <packet type>
-	
-**Example**:
+**Example Command**:
 ```
 $ sudo tcpdump -i ens160 port 1812 -T radius
 ```
-
 ```
 ...
 13:07:48.652516 IP sg-nrad1.tein.aarnet.edu.au.radius > sg-rad1.tein.aarnet.edu.au.36217: RADIUS, Access-Challenge (11), id: 0x07 length: 140
 13:07:48.656860 IP sg-rad1.tein.aarnet.edu.au.36217 > sg-nrad1.tein.aarnet.edu.au.radius: RADIUS, Access-Request (1), id: 0x08 length: 189
 13:07:48.656964 IP sg-nrad1.tein.aarnet.edu.au.47767 > au-nrad1.tiein.aarnet.edu.au.radius: RADIUS, Access-Request (1), id: 0x49 length: 189
 13:07:48.658624 IP au-nrad1.tiein.aarnet.edu.au.radius > sg-nrad1.tein.aarnet.edu.au.47767: RADIUS, Access-Challenge (11), id: 0x49 length: 104
-13:07:48.658699 IP sg-nrad1.tein.aarnet.edu.au.radius > sg-rad1.tein.aarnet.edu.au.36217: RADIUS, Access-Challenge (11), id: 0x08 length: 104
-13:07:48.664385 IP sg-rad1.tein.aarnet.edu.au.36217 > sg-nrad1.tein.aarnet.edu.au.radius: RADIUS, Access-Request (1), id: 0x09 length: 198
-13:07:48.664494 IP sg-nrad1.tein.aarnet.edu.au.47767 > au-nrad1.tiein.aarnet.edu.au.radius: RADIUS, Access-Request (1), id: 0x4a length: 198
-13:07:48.667835 IP au-nrad1.tiein.aarnet.edu.au.radius > sg-nrad1.tein.aarnet.edu.au.47767: RADIUS, Access-Accept (2), id: 0x4a length: 160
-13:07:48.668016 IP sg-nrad1.tein.aarnet.edu.au.radius > sg-rad1.tein.aarnet.edu.au.36217: RADIUS, Access-Accept (2), id: 0x09 length: 160
 ...
 ```
+**Flag and Input Explanation**
+- `-i ens160`: Listen on network interface ens160. The interface name may or may not be different on your host machine.
+- `port 1812`: Listen on port 1812.
+- `-T radius`: Listen for only RADIUS packets.
+Check the tcpdump manual page for additional options. 
+
 
 ### ss
-ss or Socket Statistics is a tool that displays current socket information of the host machine. It allows us to check whether the radsecproxy process is listening to UDP port 1812 by usiing the following command:
+ss or Socket Statistics is a tool that displays current socket information of the host machine. It allows us to check whether the radsecproxy process is listening to UDP port 1812 by using the following command:
 
 ```	
 $ sudo ss -ulpn sport eq 1812
@@ -489,8 +485,7 @@ The output shows that radsecproxy is indeed listening on UDP Port 1812 on both I
 - `-n`: Displays numeric port number. If this was not used, you would see `radius` instead of `1812`
 - `sport eq 1812`: Filters for source port equal to 1812
 
-
-
+---
 ## Conclusion
 
 The NRS is now setup and ready to accept RADIUS requests from trusted Institutional RADIUS Servers and the eduroam Top Level RADIUS. When new IRS joins you federation, be sure to add the appropriate Client, Server and/or Realm blocks depending on what type of service the IRS provides. Always ensure that the Top Level RADIUS  (TLR) Realm block is at the bottom of the configuration file. This will ensure that radsecproxy forwards only valid user requests to the eduroam TLR.
