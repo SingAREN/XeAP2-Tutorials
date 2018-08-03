@@ -11,6 +11,11 @@ Create or use existing a radsecproxy configuration file in your desired director
 Create a log file if you want logs to be saved on the Docker host machine: E.g. ```# touch /var/log/radsecproxy.log```
 
 ### Foreground Start
+
+Stop currently running radsecproxy service to ensure there are no network port clashes when trying to start the radsecproxy Docker container:
+
+    $ sudo pkill radsecproxy
+    
 Start the container in the foreground using the following command. Remember to change the file paths for the radsecproxy log and configuration file.
 
     $ sudo docker run -it --name nrs \
