@@ -529,7 +529,7 @@ The output shows that radsecproxy is indeed listening on UDP Port 1812 on both I
 ---
 ## Conclusion
 
-The NRS is now setup and ready to accept RADIUS requests from trusted Institutional RADIUS Servers and the eduroam Top Level RADIUS. When new IRS joins you federation, be sure to add the appropriate Client, Server and/or Realm blocks depending on what type of service the IRS provides. Always ensure that the Top Level RADIUS  (TLR) Realm block is at the bottom of the configuration file. This will ensure that radsecproxy forwards only valid user requests to the eduroam TLR.
+The NRS is now setup and ready to accept RADIUS requests from trusted Institutional RADIUS Servers and the eduroam Top Level RADIUS. When new Institutions of Higher Learning join your federation, be sure to add the appropriate Client, Server and/or Realm blocks depending on what type of service their Institutional RADIUS Server provides. Always ensure that the Top Level RADIUS (TLR) Realm block is at the bottom of the configuration file. This will ensure that radsecproxy forwards only valid user requests to the eduroam TLR.
 
 
 ### Extra Configuration Information
