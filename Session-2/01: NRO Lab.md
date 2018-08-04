@@ -439,7 +439,44 @@ There are two settings that are used to run the radsecproxy service. The first i
 ## Shutting Down radsecproxy
 
 	$ sudo pkill radsecproxy
+
+
+## Starting radsecproxy Automatically After Server Start-Up
+
+1. If `/etc/rc.local` is not present, creat the `/etc/rc.local` file and make it excutable:
+
+		$ sudo touch /etc/rc.local
+		$ sudo chmod +x /etc/rc.local
 	
+2. Open `/etc/rc.local` with your favourite text editor (vim, nano, emacs, etc):
+
+		$ sudo vim /etc/rc.local
+
+3. Add contents to `/etc/rc.local` 
+	
+	- If `/etc/rc.local` is a new file, add the following:
+
+			#!/bin/sh -e
+			#
+			# rc.local
+			#
+			# This script is executed at the end of each multiuser runlevel.
+			# Make sure that the script will "exit 0" on success or any other
+			# value on error.
+			#
+			# In order to enable or disable this script just change the execution
+			# bits.
+			#
+			# By default this script does nothing.
+
+			radsecproxy
+			exit 0
+		
+	- Otherwise add the radsecproxy start command between `#!/bin/sh -e` and `exit 0` lines as shown above.
+	
+**radsecproxy will now start once the server boots up.**
+
+
 ## Debugging Tool Overview
 
 ### tcpdump
