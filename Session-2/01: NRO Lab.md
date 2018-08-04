@@ -5,50 +5,6 @@ The XeAP 2 project will be using radsecproxy as the National and Top RADIUS Serv
 
   
 As the XeAP 2 Virutal Machines are running Ubuntu 18.04 LTS, we will install radsecproxy v1.7.1 from source as the apt package manager only provides version 1.6.9.
- 
-
-## Open RADIUS Ports on Firewall
-UncomplicatedFirewall (ufw) is enabled on the XeAP2 lab Virtual Machines thus the RADIUS network ports must be opened to accept RADIUS connections. ufw is a frontend to iptables, the default Linux kernel firewall. 
-
-1. Open RADIUS ports - UDP port 1812 and 1813:
-
-	```
-	$ sudo ufw allow 1812/udp
-	```
-	```
-	Rule added
-	Rule added (v6)
-	```
-	```
-	$ sudo ufw allow 1813/udp
-	```
-	```
-	Rule added
-	Rule added (v6)
-	```
-
-2. Check that RADIUS ports - UDP ports 1812 and 1813 - are allowed:
-	
-	```
-	$ sudo ufw status verbose
-	```
-	```
-	Status: active
-	Logging: on (low)
-	Default: deny (incoming), allow (outgoing), deny (routed)
-	New profiles: skip
-
-	To                 Action      From
-	--                 ------      ----
-	22/tcp            ALLOW IN    Anywhere
-	1812/udp          ALLOW IN    Anywhere
-	1813/udp          ALLOW IN    Anywhere
-	22/tcp  (v6)      ALLOW IN    Anywhere (v6)
-	1812/udp (v6)     ALLOW IN    Anywhere (v6)
-	1813/udp (v6)     ALLOW IN    Anywhere (v6)
-	```
-
-**The NRS VM is now able to receive RADIUS requests from Institutional and Top Level RADIUS Servers.**
 
 
 ## radsecproxy Installation
