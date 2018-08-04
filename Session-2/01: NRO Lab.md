@@ -436,6 +436,10 @@ There are two settings that are used to run the radsecproxy service. The first i
 	```
   **Your NRS is now ready for production use.**
 
+## Shutting Down radsecproxy
+
+	$ sudo pkill radsecproxy
+	
 ## Debugging Tool Overview
 
 ### tcpdump
