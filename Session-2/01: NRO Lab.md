@@ -500,7 +500,7 @@ There are two settings that are used to run the radsecproxy service. The first i
 
 ## Sending FTicks Logs to eduroam OT Monitoring Service
 
-- Create a new syslog configuration file at `/etc/rsyslog.d/eduroam_fticks.log` with either of the following configurations to manipulate the FTicks logs.
+- Create a new syslog configuration file at `/etc/rsyslog.d/eduroam_fticks.conf` with either of the following configurations to manipulate the FTicks logs.
 	- **For FTicks Sent to Syslog**
 	
 		```
