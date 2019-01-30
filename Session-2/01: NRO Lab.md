@@ -500,6 +500,52 @@ There are two settings that are used to run the radsecproxy service. The first i
 
 ## Sending FTicks Logs to eduroam OT Monitoring Service
 
+### For FTicks Sent to Syslog
+
+- Create a new syslog configuration file at `/etc/rsyslog.d/eduroam_fticks.log` with either of the following configurations to manipulate the FTicks logs.
+	- **For FTicks Sent to Syslog**
+	
+		```
+		# Writes FTicks log line to /var/log/fticks/fticks.log
+		:msg, contains, "F-TICKS/eduroam/1.0#" /var/log/fticks/fticks.log
+
+		# Sends FTicks log line to IP w.x.y.z at TCP port 514.
+		# Please contact the eduroam OT to receive the actual IP address.
+		:msg, contains, "F-TICKS/eduroam/1.0#" @w.x.y.z:514
+
+		# Stops processing the FTicks log line
+		:msg, contains, "F-TICKS/eduroam/1.0#" stop
+		```
+		
+	- **For FTicks sent to LogDestination (FTicksSyslogFacility not set)**
+	
+		```
+		module(load="imfile" PollingInterval="10") #needs to be done just once
+
+		# Input File
+		input(type="imfile"
+		      File="/var/log/radsecproxy/radsecproxy.log"
+		      Tag="radsecproxy"
+		      )
+
+		# Writes FTicks log line to /var/log/fticks/fticks.log
+		:msg, contains, "F-TICKS/eduroam/1.0#" /var/log/fticks/fticks.log
+
+		# Sends FTicks log line to IP w.x.y.z at TCP port 514.
+		# Please contact the eduroam OT to receive the actual IP address.
+		:msg, contains, "F-TICKS/eduroam/1.0#" @w.x.y.z:514
+
+		# Stops processing the FTicks log line
+		:msg, contains, "F-TICKS/eduroam/1.0#" stop
+		```
+	
+- Restart `rsyslog`
+
+	```
+	$ sudo systemctl restart rsyslog
+	```
+FTick logs will now be appearing within `/var/log/fticks/fticks.log` and are now being sent to the eduroam OT FTicks Monitoring Server.
+
 ## Debugging Tool Overview
 
 ### tcpdump
