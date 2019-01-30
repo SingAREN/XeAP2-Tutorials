@@ -21,38 +21,32 @@ As the XeAP 2 Virutal Machines are running Ubuntu 18.04 LTS, we will install rad
 
 		$ sudo apt install build-essential libssl-dev make nettle-dev curl
 		
-4. Change directory to ```/usr/local/src/``` and download the radsecproxy v1.7.1 release:
+4. Change directory to ```/usr/local/src/``` and download the radsecproxy v1.7.2 release:
 		
 		$ cd /usr/local/src/
-		$ sudo curl -Lo radsecproxy-1.7.1.tar.gz \
-		      https://github.com/radsecproxy/radsecproxy/releases/download/1.7.1/radsecproxy-1.7.1.tar.gz
+		$ sudo curl -Lo radsecproxy-1.7.2.tar.gz \
+		      https://github.com/radsecproxy/radsecproxy/releases/download/1.7.2/radsecproxy-1.7.2.tar.gz
 
 5. Extract the radsecproxy package, remove the package and enter into the radsecproxy source directory:
 		
-		$ sudo tar xpvf radsecproxy-1.7.1.tar.gz
-		$ sudo rm radsecproxy-1.7.1.tar.gz
-		$ cd radsecproxy-1.7.1
+		$ sudo tar xpvf radsecproxy-1.7.2.tar.gz
+		$ sudo rm radsecproxy-1.7.2.tar.gz
+		$ cd radsecproxy-1.7.2
 
-6. Download and apply the radsecproxy patch needed to successfully compile the package on Ubuntu 18.04 LTS:
-
-		$ sudo curl -fsL -o tests/t_fticks.patch \
-		    "https://raw.githubusercontent.com/spgreen/eduroam-radsecproxy-docker/master/1.7.1-xeap2/patch/tests/t_fticks.patch"
-		$ sudo patch tests/t_fticks.c tests/t_fticks.patch
-
-7. Download the line log patch which adds the Operator Name and Chargeable User Identity (CUI) attributes to the radsecproxy logs. Shout-out to Vlad Mencl, REANNZ, for creating the patch.
+6. Download the line log patch which adds the Operator Name and Chargeable User Identity (CUI) attributes to the radsecproxy logs. Shout-out to Vlad Mencl, REANNZ, for creating the patch.
 
 		$ sudo curl -fsL -o radsecproxy-log-opname-cui.diff \
 		    "https://raw.githubusercontent.com/spgreen/eduroam-radsecproxy-docker/master/1.7.1-xeap2/patch/radsecproxy-log-opname-cui.diff"
 		$ sudo patch -p1 < radsecproxy-log-opname-cui.diff
 
-8. Configure, compile, check and install radsecproxy -v:
+7. Configure, compile, check and install radsecproxy -v:
 
 		$ sudo ./configure
 		$ sudo make
 		$ sudo make check
 		$ sudo make install
 
-9. radsecproxy is now installed. The executable can be found using the ```which``` command:
+8. radsecproxy is now installed. The executable can be found using the ```which``` command:
 	
 		$ which radsecproxy
 		
@@ -60,13 +54,13 @@ As the XeAP 2 Virutal Machines are running Ubuntu 18.04 LTS, we will install rad
 	
 		/usr/local/sbin/radsecproxy
 		
-10. Check the radsecproxy version once installation has been completed:
+9. Check the radsecproxy version once installation has been completed:
 
 		$ radsecproxy -v 
 
 	Output you should receive:
 	```
-	radsecproxy revision 1.7.1
+	radsecproxy revision 1.7.2
 	This binary was built with support for the following transports:
 	  UDP
 	  TCP
@@ -74,16 +68,16 @@ As the XeAP 2 Virutal Machines are running Ubuntu 18.04 LTS, we will install rad
 	  DTLS
 	```
 	
-11. Create an empty configuration file at the default radsecproxy configuration file location:
+10. Create an empty configuration file at the default radsecproxy configuration file location:
 
 		$ sudo touch /usr/local/etc/radsecproxy.conf
 		
-12. Create the log directory and the log file where radsecproxy will store its logs:
+11. Create the log directory and the log file where radsecproxy will store its logs:
 
 		$ sudo mkdir /var/log/radsecproxy
 		$ sudo touch /var/log/radsecproxy/radsecproxy.log
 
-13. Open ```/usr/local/etc/radsecproxy.conf``` in your favourite text editor (vim, nano, emacs, etc):
+12. Open ```/usr/local/etc/radsecproxy.conf``` in your favourite text editor (vim, nano, emacs, etc):
 
 		$ sudo vim /usr/local/etc/radsecproxy.conf
 		
@@ -110,6 +104,28 @@ As the XeAP 2 Virutal Machines are running Ubuntu 18.04 LTS, we will install rad
 	
 	# Write logs to /var/log/radsecproxy/radsecproxy.log file
 	LogDestination file:///var/log/radsecproxy/radsecproxy.log
+	```
+	
+	- **FTicks Logging**
+	
+	```
+	# Privacy preserving syslog messages that must be sent to the 
+	# eduroam Operations F-Ticks server in Europe. Contact eduroam OT 
+	# for IP address of their server and give them your IP for the FLR
+	
+	FTicksReporting Full
+	FTicksMAC VendorKeyHashed
+	FTicksKey CHANGEME
+	
+	# Optional Configuration:
+	# 
+	# FTicksSyslogFacility will send the logs to the specified syslog facility. 
+	# If FTicksSyslogFacility is not specified, radsecproxy will send the FTick
+	# logs to the LogDestination set in General Logging.
+	#
+	# Example:
+	#
+	FTicksSyslogFacility LOG_LOCAL2
 	```
 	
 	- **Loop prevention:**
@@ -284,6 +300,12 @@ As the XeAP 2 Virutal Machines are running Ubuntu 18.04 LTS, we will install rad
 ListenUDP *:1812
 LogLevel 3
 LogDestination file:///var/log/radsecproxy/radsecproxy.log
+
+# FTicks Logs
+FTicksReporting Full
+FTicksMAC VendorKeyHashed
+FTicksKey CHANGEME
+FTicksSyslogFacility LOG_LOCAL2
 
 LoopPrevention On 
 
@@ -476,6 +498,7 @@ There are two settings that are used to run the radsecproxy service. The first i
 	
 **radsecproxy will now start once the server boots up.**
 
+## Sending FTicks Logs to eduroam OT Monitoring Service
 
 ## Debugging Tool Overview
 
