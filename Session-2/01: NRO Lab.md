@@ -536,6 +536,12 @@ There are two settings that are used to run the radsecproxy service. The first i
 		# Stops processing the FTicks log line
 		:msg, contains, "F-TICKS/eduroam/1.0#" stop
 		```
+
+- Create `/var/log/fticks/` directory
+
+	```
+	$ sudo mkdir /var/log/fticks
+	```
 	
 - Restart `rsyslog`
 
