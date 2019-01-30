@@ -165,6 +165,8 @@ As the XeAP 2 Virutal Machines are running Ubuntu 18.04 LTS, we will install rad
         host 203.0.113.1
         # RADIUS communication protocol used
         type UDP
+        # Log FTicks Country
+        FTicksVISCOUNTRY <Your two character country code, eg Singapore=SG>
         # Secret key negotiated between NRO and Institution
         secret changeme
     }
@@ -326,6 +328,8 @@ client IHL-1 {
     host              203.0.113.1
     type              UDP
     secret            changeme
+    FTicksVISCOUNTRY  AZ
+
 }	
 server IHL-1 {
     host              203.0.113.1
@@ -541,6 +545,12 @@ There are two settings that are used to run the radsecproxy service. The first i
 
 	```
 	$ sudo mkdir /var/log/fticks
+	```
+
+- Set owner and group for `/var/log/fticks/`
+
+	```
+	$ sudo chown syslog:adm /var/log/fticks
 	```
 	
 - Restart `rsyslog`
