@@ -25,7 +25,7 @@ Start the container in the foreground using the following command. Remember to c
       -e ENVIRONMENT=TEST \
       -v /path/to/log/file.log:/var/log/radsecproxy/radsecproxy.log \ 
       -v /path/to/radsecproxy.conf:/etc/radsecproxy.conf \
-      spgreen/eduroam-radsecproxy:1.7.1-xeap2
+      spgreen/eduroam-radsecproxy:1.8.0-xeap2
    
 **Flag Explanation**   
 - `-p 1812:1812/udp`:
@@ -77,7 +77,7 @@ $ sudo docker ps
 The ouput will be similar to the following if the container successfully started:
 ```
 CONTAINER ID        IMAGE                                           COMMAND                  CREATED             STATUS              PORTS               NAMES
-d81ef00df034        spgreen/eduroam-radsecproxy:1.7.1-xeap2         "/bin/sh -c '/sbin/r…"   5 minutes ago       Up 5 minutes        1812-1813/udp       nrs
+d81ef00df034        spgreen/eduroam-radsecproxy:1.8.0-xeap2         "/bin/sh -c '/sbin/r…"   5 minutes ago       Up 5 minutes        1812-1813/udp       nrs
 ```
 
 **Viewing Logs**
