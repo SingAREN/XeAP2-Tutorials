@@ -4,7 +4,7 @@
 The XeAP 2 project will be using radsecproxy as the National and Top RADIUS Servers within the XeAP2 eduroam environment. There are other alternatives - such as FreeRADIUS - that are able to perform as an NRS but radsecproxy is lightweight and only requires the user to worry about a single configuration file unlike FreeRADIUS.
 
   
-As the XeAP 2 Virutal Machines are running Ubuntu 18.04 LTS, we will install radsecproxy v1.7.1 from source as the apt package manager only provides version 1.6.9.
+As the XeAP 2 Virutal Machines are running Ubuntu 18.04 LTS, we will install radsecproxy v1.8.0 from source as the apt package manager only provides version 1.6.9.
 
 
 ## radsecproxy Installation
@@ -21,22 +21,22 @@ As the XeAP 2 Virutal Machines are running Ubuntu 18.04 LTS, we will install rad
 
 		$ sudo apt install build-essential libssl-dev make nettle-dev curl
 		
-4. Change directory to ```/usr/local/src/``` and download the radsecproxy v1.7.2 release:
+4. Change directory to ```/usr/local/src/``` and download the radsecproxy v1.8.0 release:
 		
 		$ cd /usr/local/src/
-		$ sudo curl -Lo radsecproxy-1.7.2.tar.gz \
-		      https://github.com/radsecproxy/radsecproxy/releases/download/1.7.2/radsecproxy-1.7.2.tar.gz
+		$ sudo curl -Lo radsecproxy-1.8.0.tar.gz \
+		      https://github.com/radsecproxy/radsecproxy/releases/download/1.8.0/radsecproxy-1.8.0.tar.gz
 
 5. Extract the radsecproxy package, remove the package and enter into the radsecproxy source directory:
 		
-		$ sudo tar xpvf radsecproxy-1.7.2.tar.gz
-		$ sudo rm radsecproxy-1.7.2.tar.gz
-		$ cd radsecproxy-1.7.2
+		$ sudo tar xpvf radsecproxy-1.8.0.tar.gz
+		$ sudo rm radsecproxy-1.8.0.tar.gz
+		$ cd radsecproxy-1.8.0
 
 6. Download the line log patch which adds the Operator Name and Chargeable User Identity (CUI) attributes to the radsecproxy logs. Shout-out to Vlad Mencl, REANNZ, for creating the patch.
 
 		$ sudo curl -fsL -o radsecproxy-log-opname-cui.diff \
-		    "https://raw.githubusercontent.com/spgreen/eduroam-radsecproxy-docker/master/1.7.1-xeap2/patch/radsecproxy-log-opname-cui.diff"
+		    "https://raw.githubusercontent.com/spgreen/eduroam-radsecproxy-docker/master/1.8.0-xeap2/patch/radsecproxy-log-opname-cui.diff"
 		$ sudo patch -p1 < radsecproxy-log-opname-cui.diff
 
 7. Configure, compile, check and install radsecproxy -v:
@@ -60,7 +60,7 @@ As the XeAP 2 Virutal Machines are running Ubuntu 18.04 LTS, we will install rad
 
 	Output you should receive:
 	```
-	radsecproxy revision 1.7.2
+	radsecproxy revision 1.8.0
 	This binary was built with support for the following transports:
 	  UDP
 	  TCP
